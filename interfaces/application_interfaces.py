@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkcalendar import DateEntry
 from tkinter import ttk
+from database.database import Database
 
 
 class App(object):
@@ -16,7 +17,7 @@ class App(object):
         btn_register = tk.Button(self.root, text="Registrar Reserva", command=self.register)
         btn_register.pack(fill=tk.X, padx=5, pady=5, ipadx=2, ipady=5)
 
-        btn_list_event = tk.Button(self.root, text="Listado de  Eventos", command=self.list_event)
+        btn_list_event = tk.Button(self.root, text="Listado de  Eventos", command=self.list_events)
         btn_list_event.pack(fill=tk.X, padx=5, pady=5, ipadx=2, ipady=5)
 
     def hide(self):
@@ -29,6 +30,14 @@ class App(object):
     def show(self):
         self.root.update()
         self.root.deiconify()
+
+    def validation_of_integer(self, entry):
+        if len(entry) == 0:
+            return True
+        elif entry.isdigit() and int(entry) > 0:
+            return True
+        else:
+            return False
 
     def add_event(self):
         self.hide()
@@ -45,9 +54,11 @@ class App(object):
         date.grid(row=1, column=1, pady=10)
 
         tk.Label(other_frame, text='Numero de asistentos:', font=("Futura Md BT", 12)).grid(row=2, column=0, pady=10)
-        entry_chairs = tk.StringVar()
-        tk.Entry(other_frame, textvariable=entry_chairs, width=20).grid(row=2, column=1, pady=10)
-
+        entry_chairs_var = tk.StringVar()
+        tk.Entry(other_frame, textvariable=entry_chairs_var, width=20, validate="key",
+                 validatecommand=(other_frame.register(self.validation_of_integer), '%P')).grid(row=2, column=1,
+                                                                                                pady=10)
+        # entry_chairs.config(, )
         handler = lambda: self.on_close(other_frame)
         btn = tk.Button(other_frame, text="Cancelar", command=handler, width=20)
         btn.grid(row=4, column=0, pady=20)
@@ -96,20 +107,26 @@ class App(object):
         btn_save = tk.Button(other_frame, text="Guardar", command=handler, width=20)
         btn_save.grid(row=8, column=1, pady=20, padx=5)
 
-    def list_event(self):
+    def list_events(self):
         self.hide()
+        database = Database()
+        dataset = database.get_list_events()
         other_frame = tk.Toplevel()
         other_frame.geometry("1050x400")
         other_frame.title("Listado de eventos")
 
-        table = ttk.Treeview(other_frame, columns=("nombre", "fecha","numero_asientos","numeros_asistos_reservados"))
-        table.grid(row=1, column=0, columnspan=5, pady=20,padx=10)
+        table = ttk.Treeview(other_frame, columns=("nombre", "fecha", "numero_asientos", "numeros_asistos_reservados"))
+        table.grid(row=1, column=0, columnspan=5, pady=20, padx=10)
         table.heading("#0", text="codigo")
         table.heading("nombre", text="nombre")
         table.heading("fecha", text="fecha")
         table.heading("numero_asientos", text="numeros de asientos")
         table.heading("numeros_asistos_reservados", text="numero de asientos reservados")
-        # table.grid(row=1, column=0, columnspan=3)
+        for data in dataset:
+            table.insert("", tk.END, text=str(data[0]), values=(str(data[1]),
+                                                                str(data[2]),
+                                                                str(data[3]),
+                                                                str(data[4])))
 
         handler = lambda: self.on_close(other_frame)
         btn = tk.Button(other_frame, text="Cancelar", command=handler, width=20)
