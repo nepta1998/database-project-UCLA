@@ -78,11 +78,6 @@ def add_event():
     return redirect(url_for('events'))
 
 
-@app.route("/registrar-reserva")
-def reserve_register():
-    return "registrar reserva"
-
-
 @app.route("/edit-event/<id>")
 def edit_event(id):
     event = query_db('SELECT * FROM Evento WHERE id = ?', [id], True)
@@ -100,6 +95,12 @@ def update_event(id):
                            [name, date, number, id])
         flash('El evento fue actualizado satisfactoriamente')
     return redirect(url_for('events'))
+
+
+@app.route("/selection-event/<id>/<name>")
+def select_event(id, name):
+    print(id)
+    return render_template('select-event.html', allow=True, name=name)
 
 
 if __name__ == "__main__":
