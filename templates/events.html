@@ -58,6 +58,7 @@
                           <th scope="col">Fecha</th>
                           <th scope="col">Numero de asientos toatales</th>
                           <th scope="col">Numero de asientos reservados</th>
+                          <th scope="col">Acción</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -68,6 +69,10 @@
                           <td>{{ event.fecha }}</td>
                           <td>{{ event.numero_asientos_total }}</td>
                           <td>{{ event.numero_asientos_reservados }}</td>
+                          <td>
+                              <a class="btn btn-primary" href="/edit-event/{{ event.id }}"> Editar</a>
+
+                          </td>
                         </tr>
                       {% endfor %}
                       </tbody>

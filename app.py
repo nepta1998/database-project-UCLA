@@ -49,8 +49,8 @@ def query_db(query, args=(), one=False):
     return (rv[0] if rv else None) if one else rv
 
 
-def query_db_insert(query, args=()):
-    """Ejecuta consultas SELECT en la base de datos"""
+def query_db_all_other(query, args=()):
+    """Ejecuta  Las demás consultas:  update, delete, insert"""
     cur = get_db().execute(query, args)
     cur.connection.commit()
 
@@ -73,7 +73,7 @@ def add_event():
         name = request.form["name"]
         date = request.form["date"]
         number = request.form["number"]
-        query_db_insert('INSERT INTO Evento VALUES(NULL,?,?,?,?)', (name, date, number, 0))
+        query_db_all_other('INSERT INTO Evento VALUES(NULL,?,?,?,?)', [name, date, number, 0])
         flash('El evento fue agregado satisfactoriamente')
     return redirect(url_for('events'))
 
@@ -81,6 +81,25 @@ def add_event():
 @app.route("/registrar-reserva")
 def reserve_register():
     return "registrar reserva"
+
+
+@app.route("/edit-event/<id>")
+def edit_event(id):
+    event = query_db('SELECT * FROM Evento WHERE id = ?', [id], True)
+    date = datetime.now().date()
+    return render_template('edit_event.html', event=event, date=date)
+
+
+@app.route("/update-event/<id>", methods=['POST'])
+def update_event(id):
+    if request.method == 'POST':
+        name = request.form["name"]
+        date = request.form["date"]
+        number = request.form["number"]
+        query_db_all_other('UPDATE Evento SET nombre = ?, fecha = ?, numero_asientos_total = ? WHERE id = ?',
+                           [name, date, number, id])
+        flash('El evento fue actualizado satisfactoriamente')
+    return redirect(url_for('events'))
 
 
 if __name__ == "__main__":
