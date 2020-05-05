@@ -50,7 +50,8 @@ def index():
 
 @app.route("/eventos")
 def events():
-    return "eventos"
+    events = query_db('SELECT * FROM Evento')
+    return render_template('events.html', events=events)
 
 
 @app.route("/registrar-reserva")
