@@ -2,11 +2,17 @@ import sqlite3
 from flask import (
     Flask,
     g,
-    render_template
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash
 )
+from datetime import datetime
 
 app = Flask(__name__)
 DATABASE = 'database.db'
+app.secret_key = 'mysecretkey'
 
 
 def make_dicts(cursor, row):
@@ -43,6 +49,12 @@ def query_db(query, args=(), one=False):
     return (rv[0] if rv else None) if one else rv
 
 
+def query_db_insert(query, args=()):
+    """Ejecuta consultas SELECT en la base de datos"""
+    cur = get_db().execute(query, args)
+    cur.connection.commit()
+
+
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -51,7 +63,19 @@ def index():
 @app.route("/eventos")
 def events():
     events = query_db('SELECT * FROM Evento')
-    return render_template('events.html', events=events)
+    date = datetime.now().date()
+    return render_template('events.html', events=events, date=date)
+
+
+@app.route("/add-event", methods=['POST'])
+def add_event():
+    if request.method == 'POST':
+        name = request.form["name"]
+        date = request.form["date"]
+        number = request.form["number"]
+        query_db_insert('INSERT INTO Evento VALUES(NULL,?,?,?,?)', (name, date, number, 0))
+        flash('El evento fue agregado satisfactoriamente')
+    return redirect(url_for('events'))
 
 
 @app.route("/registrar-reserva")

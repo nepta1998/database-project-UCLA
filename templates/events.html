@@ -6,23 +6,23 @@
             <div class="card bg-dark">
                 <div class="car-body text-white">
                     <h2 class="card-title text-center mt-3"> Formulario de evento</h2>
-                    <form class="my-5">
+                    <form class="my-5" action="/add-event" method="POST">
                         <div class="form-group row">
-                            <label for="nombre" class="col-sm-3 col-form-label mx-3">Nombre</label>
+                            <label for="nombre"  class="col-sm-3 col-form-label mx-3">Nombre</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="nombre" required>
+                              <input type="text" name="name" class="form-control" id="nombre" required>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="fecha" class="col-sm-3 col-form-label mx-3">Fecha</label>
                             <div class="col-sm-8">
-                              <input type="date"  class="form-control" id="fecha" required>
+                              <input type="date"  name="date" class="form-control" id="fecha" min={{ date }} required>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="numero_asiento" class="col-sm-3 col-form-label mx-3">Numero de asientos</label>
                             <div class="col-sm-8">
-                              <input type="number" class="form-control" id="numero_asiento" min="10" required>
+                              <input type="number" name="number" class="form-control" id="numero_asiento" min="10" required>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -31,6 +31,18 @@
                             </div>
                         </div>
                     </form>
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-success alert-dismissible fade show col-sm-10 mx-5 mt-3" role="alert">
+                      {{ message }}
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
                 </div>
             </div>
         </div>
