@@ -11,7 +11,7 @@ from flask import (
 from datetime import datetime
 
 app = Flask(__name__)
-DATABASE = 'database.db'
+DATABASE = './database.db'
 app.secret_key = 'mysecretkey'
 
 
