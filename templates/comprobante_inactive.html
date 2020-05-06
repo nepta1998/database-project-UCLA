@@ -1,0 +1,96 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="container-fluid">
+    <div class="bg-custom row align-items-center justify-content-center vh-100">
+        <div class="col-md-6">
+            <div class="card bg-dark">
+                <div class="car-body text-white">
+                    <h2 class="card-title text-center mt-3"> Formulario de evento</h2>
+                    <form class="my-5">
+                        <div class="form-group row">
+                            <label for="comprobante-id"  class="col-sm-3 col-form-label mx-3">Numero</label>
+                            <div class="col-sm-8">
+                              <input type="text" name="name" class="form-control" id="comprobante-id"
+                                     value="{{comprobante.id}}" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="comprobante-fecha"  class="col-sm-3 col-form-label mx-3">Fecha del comprobante</label>
+                            <div class="col-sm-8">
+                              <input type="date" name="name" class="form-control" id="comprobante-fecha"
+                                     value={{comprobante.fecha}} readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="event-name"  class="col-sm-3 col-form-label mx-3">Nombre del evento</label>
+                            <div class="col-sm-8">
+                              <input type="text" name="name" class="form-control" id="event-name"
+                                     value="{{event.nombre}}" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="event-fecha"  class="col-sm-3 col-form-label mx-3">Fecha del evento</label>
+                            <div class="col-sm-8">
+                              <input type="date" name="name" class="form-control" id="event-fecha"
+                                     value={{event.fecha}} readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="nombre"  class="col-sm-3 col-form-label mx-3">Nombre</label>
+                            <div class="col-sm-8">
+                              <input type="text" name="name" class="form-control" id="nombre"
+                                     value="{{participante.nombre}}" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="apellido-paterno" class="col-sm-3 col-form-label mx-3">Apellido paterno</label>
+                            <div class="col-sm-8">
+                              <input type="text"  name="apellido_paterno" class="form-control" id="apellido-paterno"
+                                     value="{{participante.apellido_paterno}}" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="apellido-materno" class="col-sm-3 col-form-label mx-3">Apellido materno</label>
+                            <div class="col-sm-8">
+                              <input type="text"  name="apellido_materno" class="form-control" id="apellido-materno"
+                                     value="{{participante.apellido_materno}}" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="empresa" class="col-sm-3 col-form-label mx-3">Empresa</label>
+                            <div class="col-sm-8">
+                              <input type="text"  name="empresa" class="form-control" id="empresa"
+                                     value="{{participante.empresa}}" readonly>
+                            </div>
+                        </div>
+                         <div class="form-group row">
+                            <label for="puesto" class="col-sm-3 col-form-label mx-3">Puesto</label>
+                            <div class="col-sm-8">
+                              <input type="text"  name="puesto" class="form-control" id="puesto"
+                                     value="{{participante.puesto}}" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="correo" class="col-sm-3 col-form-label mx-3">Correo</label>
+                            <div class="col-sm-8">
+                              <input type="email"  name="correo" class="form-control" id="correo"
+                                     value="{{participante.correo}}" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="telefono" class="col-sm-3 col-form-label mx-3">Telefono</label>
+                            <div class="col-sm-8">
+                              <input type="number" name="telefono" class="form-control" id="telefono" min="0"
+                                     value={{participante.telefono}} readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                              <a class="btn btn-secondary mx-5 mt-3  col-sm-10 font-weight-bold" href="/detail-event/{{participante.evento_id}}/{{name}}">Volver</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

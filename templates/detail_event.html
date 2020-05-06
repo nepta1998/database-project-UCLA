@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% block body %}
+<nav class=" bg-custom navbar navbar-light bg-light">
+     <a class="navbar-brand text-white" href="/events-inactive">Volver</a>
+</nav>
+<div class="container-fluid">
+    <div class="bg-custom row align-items-center justify-content-center vh-100">
+        <div class="col-md-8">
+            <div class="card bg-dark">
+                <div class="car-body text-white mx-3">
+                    <h2 class="card-title text-center mt-3"> Lista de partcipantes del evento {{ name }} </h2>
+                    <table class="table table-striped table-dark my-3 ">
+                      <thead>
+                        <tr>
+                          <th scope="col">Nombre</th>
+                          <th scope="col">Apellido paterno</th>
+                          <th scope="col">Apellido materno</th>
+                          <th scope="col">Empresa</th>
+                          <th scope="col">Puesto</th>
+                          <th scope="col">Correo</th>
+                          <th scope="col">Telefono</th>
+                          <th scope="col">Acción</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for part in participantes %}
+                        <tr>
+                          <th scope="row">{{ part.nombre }}</th>
+                          <td>{{ part.apellido_paterno }}</td>
+                          <td>{{ part.apellido_materno}}</td>
+                          <td>{{ part.empresa }}</td>
+                          <td>{{ part.puesto }}</td>
+                          <td>{{ part.correo }}</td>
+                          <td>{{ part.telefono }}</td>
+                          <td>
+                              <a class="btn btn-info" href="/comprobante-inactive/{{ part.correo }}/{{ part.evento_id }}/{{ name }}"> Detalle</a>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

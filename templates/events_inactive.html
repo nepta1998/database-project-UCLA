@@ -26,7 +26,7 @@
                           <td>{{ event.numero_asientos_total }}</td>
                           <td>{{ event.numero_asientos_reservados }}</td>
                           <td>
-                              <a class="btn btn-info" href="/detail-event/"> Detalle</a>
+                              <a class="btn btn-info" href="/detail-event/{{event.id}}/{{ event.nombre }}"> Detalle</a>
                           </td>
                         </tr>
                       {% endfor %}

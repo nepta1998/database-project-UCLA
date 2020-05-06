@@ -53,6 +53,9 @@
                             <div class="col-sm-12">
                               <button type="submit" class="btn btn-info mx-5 mt-3  col-sm-10 font-weight-bold">Guardar</button>
                             </div>
+                            <div class="col-sm-12">
+                              <a class="btn btn-secondary mx-5 mt-3  col-sm-10 font-weight-bold" href="/events-active">Volver</a>
+                            </div>
                         </div>
                     </form>
 
@@ -85,6 +88,7 @@
                           <th scope="col">Puesto</th>
                           <th scope="col">Correo</th>
                           <th scope="col">Telefono</th>
+                          <th scope="col">Acción</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -102,7 +106,7 @@
                               <span>|</span>
                               <a class="btn btn-info" href="/comprobante/{{ part.correo }}/{{ part.evento_id }}/{{ name }}"> Detalle</a>
                               <span>|</span>
-                              <a class="btn btn-danger" href="/comprobante/{{ part.correo }}/{{ part.evento_id }}/{{ name }}"> Eliminar</a>
+                              <a class="btn btn-danger" href="/delete-participante/{{ part.correo }}/{{ part.evento_id }}/{{ name }}"> Eliminar</a>
                           </td>
                         </tr>
                       {% endfor %}
