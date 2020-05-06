@@ -29,8 +29,23 @@
                             <div class="col-sm-12">
                               <button type="submit" class="btn btn-info mx-5 mt-3  col-sm-10 font-weight-bold">Actualizar</button>
                             </div>
+                            <div class="col-sm-12">
+                              <a class="btn btn-secondary mx-5 mt-3  col-sm-10 font-weight-bold" href="/events-active">Volver</a>
+                            </div>
                         </div>
                     </form>
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-success alert-dismissible fade show col-sm-10 mx-5 mt-3" role="alert">
+                      {{ message }}
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
                 </div>
             </div>
         </div>

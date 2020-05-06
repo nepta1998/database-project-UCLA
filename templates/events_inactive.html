@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="container-fluid">
+    <div class="bg-custom row align-items-center justify-content-center vh-100">
+        <div class="col-md-7">
+            <div class="card bg-dark">
+                <div class="car-body text-white mx-3">
+                    <h2 class="card-title text-center mt-3"> Lista de Eventos</h2>
+                    <table class="table table-striped table-dark my-3 ">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Nombre</th>
+                          <th scope="col">Fecha</th>
+                          <th scope="col">Numero de asientos toatales</th>
+                          <th scope="col">Numero de asientos reservados</th>
+                          <th scope="col">Acción</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for event in events%}
+                        <tr>
+                          <th scope="row">{{ event.id }}</th>
+                          <td>{{ event.nombre }}</td>
+                          <td>{{ event.fecha }}</td>
+                          <td>{{ event.numero_asientos_total }}</td>
+                          <td>{{ event.numero_asientos_reservados }}</td>
+                          <td>
+                              <a class="btn btn-info" href="/detail-event/"> Detalle</a>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
