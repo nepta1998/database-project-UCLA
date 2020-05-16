@@ -1,4 +1,4 @@
-# database-project-UCLA
+# Proyecto de base de datos (UCLA)
 
 Aplicación realizada en python con el framework flask(back-end), Implementando front-end con el motor de plantillas jinja2.
 
