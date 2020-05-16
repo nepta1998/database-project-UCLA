@@ -51,8 +51,11 @@ def query_db(query, args=(), one=False):
 
 def query_db_all_other(query, args=()):
     """Ejecuta  Las demás consultas:  update, delete, insert"""
-    cur = get_db().execute(query, args)
-    cur.connection.commit()
+    try:
+        cur = get_db().execute(query, args)
+        cur.connection.commit()
+    except Exception as ex:
+        print(ex)
 
 
 @app.route("/")
@@ -116,14 +119,19 @@ def select_event(id, name):
     participantes = query_db('SELECT * FROM Participante WHERE evento_id = ?', [id])
     return render_template('select-event.html', id=id, participantes=participantes, name=name)
 
+
 @app.route("/detail-event/<id>/<name>")
 def detail_event(id, name):
     participantes = query_db('SELECT * FROM Participante WHERE evento_id = ?', [id])
     return render_template('detail_event.html', id=id, participantes=participantes, name=name)
 
+
 @app.route("/delete-event/<id>/")
 def delete_event(id):
-    query_db_all_other("DELETE FROM Comprobante WHERE evento_id= ?", [id])
+    participantes = query_db('SELECT * FROM Participante WHERE evento_id = ?', [id])
+    for participante in participantes:
+        query_db_all_other("DELETE FROM Comprobante WHERE id= ?", [participante["comprobante_id"]])
+
     query_db_all_other("DELETE FROM Participante WHERE evento_id= ?", [id])
     query_db_all_other("DELETE FROM Evento WHERE id= ?", [id])
     return redirect(url_for('events'))
@@ -145,10 +153,13 @@ def add_participante(id, name):
                                        [id], True)["numero_asientos_reservados"])
         numero_asientos = numero_asientos + 1
         print(numero_asientos)
-        query_db_all_other('INSERT INTO Participante VALUES(?,?,?,?,?,?,?,?)',
+        query_db_all_other('INSERT INTO Comprobante VALUES(NULL,?,?)', [date, "por pagar"])
+        last_comprobante = query_db('SELECT * FROM Comprobante ORDER BY id DESC LIMIT 1', one=True)
+        print(last_comprobante)
+        query_db_all_other('INSERT INTO Participante VALUES(?,?,?,?,?,?,?,?,?)',
                            [name, apellido_paterno, apellido_materno, empresa, puesto,
-                            correo, telefono, id])
-        query_db_all_other('INSERT INTO Comprobante VALUES(NULL,?,?,?,?)', [date, "por pagar", id, correo])
+                            correo, telefono, id, last_comprobante["id"]])
+
         query_db_all_other('UPDATE Evento SET numero_asientos_reservados = ? where id = ?', [numero_asientos, id])
         flash('El participante fue agregado satisfactoriamente')
     return redirect(url_for('select_event', id=id, name=name))
@@ -187,7 +198,9 @@ def update_participante(correo, id, name):
 
 @app.route("/delete-participante/<correo>/<id>/<name>")
 def delete_participante(correo, id, name):
-    query_db_all_other("DELETE FROM Comprobante WHERE evento_id= ? and participante_correo=?", [id, correo])
+    participante= query_db('SELECT * FROM Participante WHERE evento_id = ? and  correo = ? ', [id, correo], True)
+
+    query_db_all_other("DELETE FROM Comprobante WHERE id= ? ", [participante["comprobante_id"]])
     query_db_all_other("DELETE FROM Participante WHERE evento_id= ? and correo =?", [id, correo])
     numero_asientos = int(query_db('SELECT  numero_asientos_reservados FROM Evento WHERE id = ?  ',
                                    [id], True)["numero_asientos_reservados"])
@@ -200,22 +213,24 @@ def delete_participante(correo, id, name):
 @app.route("/comprobante/<correo>/<id>/<name>")
 def comprobante(correo, id, name):
     participante = query_db('SELECT * FROM Participante WHERE evento_id = ? and  correo = ? ', [id, correo], True)
-    comprobante = query_db('SELECT * FROM Comprobante WHERE evento_id = ? and  participante_correo = ? ',
-                           [id, correo], True)
+    comprobante = query_db('SELECT * FROM Comprobante WHERE id = ? ',
+                           [participante["comprobante_id"]], True)
     event = query_db('SELECT * FROM Evento WHERE id  = ?', [id], True)
     return render_template('comprobante.html', participante=participante,
                            comprobante=comprobante, event=event,
                            name=name, correo=correo, id=id)
 
+
 @app.route("/comprobante-inactive/<correo>/<id>/<name>")
 def comprobante_inactive(correo, id, name):
     participante = query_db('SELECT * FROM Participante WHERE evento_id = ? and  correo = ? ', [id, correo], True)
-    comprobante = query_db('SELECT * FROM Comprobante WHERE evento_id = ? and  participante_correo = ? ',
-                           [id, correo], True)
+    comprobante = query_db('SELECT * FROM Comprobante WHERE id = ? ',
+                           [participante["comprobante_id"]], True)
     event = query_db('SELECT * FROM Evento WHERE id  = ?', [id], True)
     return render_template('comprobante_inactive.html', participante=participante,
                            comprobante=comprobante, event=event,
                            name=name, correo=correo, id=id)
+
 
 if __name__ == "__main__":
     app.run(port=8000, debug=True)
