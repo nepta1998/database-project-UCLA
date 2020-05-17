@@ -19,6 +19,12 @@ def make_dicts(cursor, row):
     """
     Muestra los datos obtenidos de la base de datos
     en forma de diccionario en lugar de tupla.
+    Tupla:(neptali,piña,22)
+    diccionario: {
+        "nombre": "Neptalí",
+        "apellido": "Piña",
+        "edad": 22
+    }
     """
     return dict((cursor.description[idx][0], value)
                 for idx, value in enumerate(row))
@@ -35,7 +41,7 @@ def get_db():
 
 @app.teardown_appcontext
 def close_connection(exception):
-    """Cirra la conección cuando termina el request context"""
+    """Cierra la conección cuando termina el request context"""
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
